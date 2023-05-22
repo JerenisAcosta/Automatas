@@ -1,0 +1,4 @@
+//PALABRA programa fin =
+//+ - 
+ENTERO& REAL% 12 13.4 PROGRAMA@
+"String"
