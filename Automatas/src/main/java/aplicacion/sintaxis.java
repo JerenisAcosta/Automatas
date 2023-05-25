@@ -41,8 +41,8 @@ public class sintaxis {
                     //for (int numero : numerosEncontrados) {
                     //    System.out.println(numero + " linea " + cuartoNumeroAnterior);
                     //}
-                    
-                    boolean resultado = variables(numerosEncontrados.toArray(new Integer[0]));
+
+                    boolean resultado = id_arreglo(numerosEncontrados.toArray(new Integer[0]));
                     if (resultado) {
                         cuartoNumeroAnterior = cuartoNumero;
                         numerosEncontrados.clear();
@@ -63,11 +63,11 @@ public class sintaxis {
                 //for (int numero : numerosEncontrados) {
                 //    System.out.println(numero + " linea " + cuartoNumeroAnterior);                   
                 //}
-                boolean resultado = variables(numerosEncontrados.toArray(new Integer[0]));
+                boolean resultado = id_arreglo(numerosEncontrados.toArray(new Integer[0]));
                 System.out.println(resultado);
                 if (!resultado) {
                     System.out.println("Error en la linea " + cuartoNumeroAnterior);
-                } else{
+                } else {
                     System.out.println("Analisis exitoso");
                 }
             }
@@ -81,22 +81,21 @@ public class sintaxis {
         if (tokens == null || tokens.length == 0) { //IDENTIFICAMOS SI ES UNA LINEA VACIA
             return true;
         }
-        
 
         if (tokens[i] != -15) { //IDENTIFICAMOS SI ES LA PALABRA VAR
             return false;
         }
-        
+
         i++;
-        
+
         boolean repetir = true;
-        
+
         while (repetir) {
             if (!id(tokens[i])) { //IDENTIFICAMOS ID
                 return false;
             }
             i++;
-            
+
             if (tokens[i] == -34) { //SI ES UN [ 
                 i++;
 
@@ -119,15 +118,55 @@ public class sintaxis {
                 }
                 i++;
             }
-               
+
             if (tokens[i] != -36) { //SI NO ES UNA ,
                 repetir = false;
-            }else{
+            } else {
                 i++;
             }
         }
-               
+
         return tokens[i] == -33; //COMPROBAMOS QUE EL FINAL DE LA LINEA SEA UN ;
+    }
+
+    public static boolean id_arreglo(Integer[] tokens) {
+        int i = 0;
+        
+        if (!id(tokens[i])) {
+            return false;
+        }
+
+        i++;
+
+        if (i != tokens.length) {
+            if (tokens[i] != -34) {               
+                return false;
+            }
+
+            i++;
+
+            if (tokens[i] != -42 && tokens[i] != -46) {              
+                return false;
+            }
+
+            i++;
+
+            while (tokens[i] == -36) {
+                i++;
+
+                if (tokens[i] != -42 && tokens[i] != -46) {
+                    
+                    return false;
+                }
+
+                i++;
+            }
+            
+            if(tokens[i] != -35){
+                return false;
+            }                     
+        }
+        return true;
     }
 
     public static boolean id(int token) {
@@ -138,4 +177,9 @@ public class sintaxis {
         return token == -45 || token == -46 || token == -47;
     }
 
+    public static boolean op_arit(int token) {
+        return token == -18 || token == -19 || token == -20 || token == -21 || token == -22 || token == -23;
+    }
+
 }
+
