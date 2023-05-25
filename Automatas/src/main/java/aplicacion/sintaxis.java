@@ -38,10 +38,10 @@ public class sintaxis {
                     numerosEncontrados.add(primerNumero);
                     //numerosEncontrados.add(segundoNumero);
                 } else {
-                    for (int numero : numerosEncontrados) {
-                        System.out.println(numero);
-                    }
-
+                    //for (int numero : numerosEncontrados) {
+                    //    System.out.println(numero + " linea " + cuartoNumeroAnterior);
+                    //}
+                    
                     boolean resultado = variables(numerosEncontrados.toArray(new Integer[0]));
                     if (resultado) {
                         cuartoNumeroAnterior = cuartoNumero;
@@ -50,23 +50,25 @@ public class sintaxis {
                         int primerNumero = Integer.parseInt(partes[1]);
                         numerosEncontrados.add(primerNumero);
                         //numerosEncontrados.add(segundoNumero);
+                        System.out.println(resultado);
                     } else {
-                        break;
+                        System.out.println("Error en la linea " + cuartoNumeroAnterior);
+                        return;
                     }
                 }
             }
 
             // Procesar el último grupo de números si hay algún número restante
             if (!numerosEncontrados.isEmpty()) {
-                for (int numero : numerosEncontrados) {
-                    System.out.println(numero);
-                }
-
+                //for (int numero : numerosEncontrados) {
+                //    System.out.println(numero + " linea " + cuartoNumeroAnterior);                   
+                //}
                 boolean resultado = variables(numerosEncontrados.toArray(new Integer[0]));
+                System.out.println(resultado);
                 if (!resultado) {
-                    System.out.println("El método procesarNumeros devolvió false para el último grupo de números.");
+                    System.out.println("Error en la linea " + cuartoNumeroAnterior);
                 } else{
-                    
+                    System.out.println("Analisis exitoso");
                 }
             }
         } catch (IOException e) {
@@ -75,26 +77,26 @@ public class sintaxis {
     }
 
     public static boolean variables(Integer[] tokens) {
+        int i = 0;
         if (tokens == null || tokens.length == 0) { //IDENTIFICAMOS SI ES UNA LINEA VACIA
             return true;
         }
-
-        int i = 0;
+        
 
         if (tokens[i] != -15) { //IDENTIFICAMOS SI ES LA PALABRA VAR
             return false;
         }
-        System.out.println(tokens[i]);
+        
         i++;
-        System.out.println(tokens[i]);
+        
         boolean repetir = true;
+        
         while (repetir) {
             if (!id(tokens[i])) { //IDENTIFICAMOS ID
                 return false;
             }
-
             i++;
-
+            
             if (tokens[i] == -34) { //SI ES UN [ 
                 i++;
 
@@ -115,15 +117,16 @@ public class sintaxis {
                 if (tokens[i] != -35) { //IDENTIFICAMOS ]
                     return false;
                 }
+                i++;
             }
-
+               
             if (tokens[i] != -36) { //SI NO ES UNA ,
                 repetir = false;
+            }else{
+                i++;
             }
-
-            //i++;
         }
-        System.out.println(tokens[i]);
+               
         return tokens[i] == -33; //COMPROBAMOS QUE EL FINAL DE LA LINEA SEA UN ;
     }
 
