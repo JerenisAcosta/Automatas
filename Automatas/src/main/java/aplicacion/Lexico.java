@@ -8,7 +8,9 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Lexico {
 
@@ -71,6 +73,7 @@ public class Lexico {
         //VALORES REALES -42
         //ENTEROS -43
         //RUTINAS -44
+        
         //CONSTANTES
         //REALES -45
         //ENTEROS -46
@@ -113,8 +116,8 @@ public class Lexico {
     }
 
     private static String[] obtenerTokens(String linea, int numeroLinea) {
-        String[] temporal = linea.split(" ");
-        String[] palabras = lineaSeparada(temporal);
+        String[] temporal = separarPalabras(linea);
+        String[] palabras = separarPuntoyComa(temporal);
         String[] tokens = new String[palabras.length];
 
         for (int i = 0; i < palabras.length; i++) {
@@ -128,6 +131,8 @@ public class Lexico {
                 } else {
                     if (constante(palabras[i]) != null) {
                         tokens[i] = palabras[i] + " " + constante(palabras[i]).toString() + " -1 " + numeroLinea;
+                    } else{
+                        tokens[i] = "error";
                     }
                 }
             }
@@ -135,8 +140,32 @@ public class Lexico {
 
         return tokens;
     }
+    
+    public static String[] separarPalabras(String input) {
+        List<String> palabras = new ArrayList<>();
+        StringBuilder palabraActual = new StringBuilder();
+        boolean dentroDeComillas = false;
 
-    public static String[] lineaSeparada(String[] temporal) {
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+
+            if (c == '"') {
+                dentroDeComillas = !dentroDeComillas;
+                palabraActual.append(c);
+            } else if (c == ' ' && !dentroDeComillas) {
+                palabras.add(palabraActual.toString());
+                palabraActual.setLength(0);
+            } else {
+                palabraActual.append(c);
+            }
+        }
+
+        palabras.add(palabraActual.toString());
+
+        return palabras.toArray(new String[0]);
+    }
+    
+    public static String[] separarPuntoyComa(String[] temporal) {
         // Transformar a minúsculas
         for (int i = 0; i < temporal.length; i++) {
             temporal[i] = temporal[i].toLowerCase();
